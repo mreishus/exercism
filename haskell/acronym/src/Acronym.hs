@@ -4,6 +4,8 @@ module Acronym
 
 import qualified Data.Char (isLower, isUpper, toUpper)
 
+-- Help generate some jargon by writing a program that converts a long name 
+-- like Portable Network Graphics to its acronym (PNG).
 abbreviate :: String -> String
 abbreviate xs = concat $ map abbrev_word $ Prelude.words $ dash_to_space xs
 
@@ -28,8 +30,10 @@ num_upper w = length $ filter Data.Char.isUpper w
 -- Number of lowercase chars in a string.
 num_lower :: String -> Int
 num_lower w = length $ filter Data.Char.isLower w
+
 -- Bonus:
 -- Naive Algorithm that fails on "HyperText" -> "HT"
+-- Does not require any helper functions..
 --
 -- abbreviate :: String -> String
 -- abbreviate xs = map (\x -> Data.Char.toUpper(head x)) $ Prelude.words xs
