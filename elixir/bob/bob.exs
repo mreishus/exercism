@@ -12,29 +12,23 @@ defmodule Bob do
 
   def hey(input) do
     cond do
-      is_empty_or_whitespace(input) -> "Fine. Be that way!"
-      is_question(input) && is_yell(input) -> "Calm down, I know what I'm doing!"
-      is_question(input) -> "Sure."
-      is_yell(input) -> "Whoa, chill out!"
+      empty_or_whitespace?(input) -> "Fine. Be that way!"
+      question?(input) && yell?(input) -> "Calm down, I know what I'm doing!"
+      question?(input) -> "Sure."
+      yell?(input) -> "Whoa, chill out!"
       true -> "Whatever."
     end
   end
 
-  @doc """
-  is_empty_or_whitespace :: String -> Bool 
-  Is input only whitespace characters or empty string?
-  """
-  def is_empty_or_whitespace(input), do: !Regex.match?(~r/\S/, input)
+  # empty_or_whitespace_alt? :: String -> Bool 
+  # Is input only whitespace characters or empty string?
+  defp empty_or_whitespace?(input), do: String.trim(input) == ""
 
-  @doc """
-  is_question :: String -> Bool 
-  Does input end in a question mark?
-  """
-  def is_question(input), do: Regex.match?(~r/\?$/, input)
+  # question? :: String -> Bool 
+  # Does input end in a question mark?
+  defp question?(input), do: String.ends_with?(input, "?")
 
-  @doc """
-  is_yell :: String -> Bool 
-  Does input contain at least one uppercase letter and no lowercase letters?
-  """
-  def is_yell(input), do: String.upcase(input) == input && Regex.match?(~r/\p{Lu}/u, input)
+  # yell? :: String -> Bool 
+  # Does input contain at least one uppercase letter and no lowercase letters?
+  defp yell?(input), do: String.upcase(input) == input && String.upcase(input) != String.downcase(input)
 end
