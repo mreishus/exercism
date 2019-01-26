@@ -7,7 +7,7 @@ import qualified Data.Char (isLower, isUpper, toUpper)
 -- Help generate some jargon by writing a program that converts a long name 
 -- like Portable Network Graphics to its acronym (PNG).
 abbreviate :: String -> String
-abbreviate xs = concat $ map abbrev_word $ Prelude.words $ dash_to_space xs
+abbreviate xs = concatMap abbrev_word $ Prelude.words $ dash_to_space xs
 
 -- Converts dashes to spaces.
 dash_to_space :: String -> String
@@ -17,11 +17,9 @@ dash_to_space xs = map (\c -> if c == '-' then ' ' else c) xs
 -- Usually picks the first letter and capitalizes it: "Cat" -> "C"
 -- But we look for camelcase and return all uppercase if so. "HyperText" -> "HT"
 abbrev_word :: String -> String
-abbrev_word w = go w (num_upper w) (num_lower w)
-  where
-    go _ u l
-      | u > 1 && l > 1 = filter Data.Char.isUpper w
-      | otherwise = [Data.Char.toUpper (head w)]
+abbrev_word w
+    | num_upper w > 1 && num_lower w > 1 = filter Data.Char.isUpper w
+    | otherwise = [Data.Char.toUpper (head w)]
 
 -- Number of uppercase chars in a string.
 num_upper :: String -> Int
