@@ -4,10 +4,7 @@ defmodule Roman do
   """
   @spec numerals(pos_integer) :: String.t()
   def numerals(number) do
-    number
-    |> digits()
-    |> Enum.map(&romanize/1)
-    |> Enum.join("")
+    romanize(number)
   end
 
   def romanize(0), do: ""
@@ -30,16 +27,4 @@ defmodule Roman do
   def romanize(n) when n >= 900 and n < 1000, do: "CM" <> romanize(n - 900)
   def romanize(n) when n >= 1000, do: "M" <> romanize(n - 1000)
 
-  ## Digits: Convert a positive integer into a list of "terms".
-  ## Hard to explain, look at the examples.
-  ## digits(1234) = [1000, 200, 30, 4]
-  ## digits(30098) = [30000, 0, 0, 90, 8]
-  @spec digits(pos_integer) :: [integer]
-  defp digits(x), do: digits(x, 0)
-  defp digits(0, _), do: []
-  defp digits(x, power_of_ten) do
-    digits( div(x, 10), power_of_ten+1 ) ++ [rem(x, 10) * power(10, power_of_ten)]
-  end
-
-  defp power(n, k), do: :math.pow(n, k) |> round
 end
