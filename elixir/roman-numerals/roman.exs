@@ -3,9 +3,7 @@ defmodule Roman do
   Convert the number to a roman number.
   """
   @spec numerals(pos_integer) :: String.t()
-  def numerals(number) do
-    romanize(number)
-  end
+  def numerals(number), do: romanize(number)
 
   def romanize(0), do: ""
   def romanize(1), do: "I"
