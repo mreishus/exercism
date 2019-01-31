@@ -5,7 +5,7 @@ defmodule Roman do
   @spec numerals(pos_integer) :: String.t()
   def numerals(number), do: romanize("", number)
 
-  defp romanize(acc, 0), do: acc <> ""
+  defp romanize(acc, 0), do: acc
   defp romanize(acc, n) when n >= 1 and n < 4, do: romanize(acc <> "I", n - 1)
   defp romanize(acc, 4), do: acc <> "IV"
   defp romanize(acc, n) when n >= 5 and n < 9, do: romanize(acc <> "V", n - 5)
