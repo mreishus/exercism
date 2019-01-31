@@ -1,8 +1,10 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Bob
   ( responseFor
   ) where
 
-import qualified Data.Char as DC
+import qualified Data.Text as T
+import           Data.Text (Text)
 
 data Statement
   = Silent
@@ -12,22 +14,17 @@ data Statement
   | Normal
   deriving (Show, Eq)
 
-responseFor :: String -> String
+responseFor :: Text -> Text
 responseFor xs
   | s == Silent = "Fine. Be that way!"
   | s == YellQuestion = "Calm down, I know what I'm doing!"
   | s == Yell = "Whoa, chill out!"
   | s == Question = "Sure."
-  | s == Normal = "Whatever."
+  | otherwise = "Whatever."
   where
-    s = parseStatement $ trim xs
+    s = parseStatement $ T.strip xs
 
-trim :: String -> String
-trim = f . f
-  where
-    f = reverse . dropWhile DC.isSpace
-
-parseStatement :: String -> Statement
+parseStatement :: Text -> Statement
 parseStatement xs
   | isSilent xs = Silent
   | isYell xs && isQuestion xs = YellQuestion
@@ -35,15 +32,15 @@ parseStatement xs
   | isQuestion xs = Question
   | otherwise = Normal
 
-isSilent :: String -> Bool
-isSilent xs = length xs == 0
+isSilent :: Text -> Bool
+isSilent xs = T.length xs == 0
 
 -- Does input contain at least one uppercase letter and no lowercase letters?
-isYell :: String -> Bool
+isYell :: Text -> Bool
 isYell xs = xsUpper == xs && xsUpper /= xsLower
   where
-    xsUpper = map DC.toUpper xs
-    xsLower = map DC.toLower xs
+    xsUpper = T.toUpper xs
+    xsLower = T.toLower xs
 
-isQuestion :: String -> Bool
-isQuestion xs = last xs == '?'
+isQuestion :: Text -> Bool
+isQuestion xs = T.last xs == '?'
