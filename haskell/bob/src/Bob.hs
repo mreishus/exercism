@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 module Bob
   ( responseFor
   ) where
 
-import qualified Data.Text as T
 import           Data.Text (Text)
+import qualified Data.Text as T
 
 data Statement
   = Silent
@@ -22,15 +23,16 @@ responseFor xs
   | s == Question = "Sure."
   | otherwise = "Whatever."
   where
-    s = parseStatement $ T.strip xs
+    s = parseStatement xs
 
 parseStatement :: Text -> Statement
-parseStatement xs
+parseStatement xs'
   | isSilent xs = Silent
   | isYell xs && isQuestion xs = YellQuestion
   | isYell xs = Yell
   | isQuestion xs = Question
   | otherwise = Normal
+  where xs = T.strip xs'
 
 isSilent :: Text -> Bool
 isSilent xs = T.length xs == 0
