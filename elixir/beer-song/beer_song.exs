@@ -3,29 +3,33 @@ defmodule BeerSong do
   Get a single verse of the beer song
   """
   @spec verse(integer) :: String.t()
-  def verse(number) do
-
-    bottles_phrase = bottles_phrase(number)
-    bottles_phrase_m1 = bottles_phrase(number - 1)
-    what_to_do = what_to_do(number)
-
-    "#{String.capitalize(bottles_phrase)} of beer on the wall, #{bottles_phrase} of beer.\n"
-      <> "#{what_to_do}, #{bottles_phrase_m1} of beer on the wall.\n"
+  def verse(0) do
+    """
+    No more bottles of beer on the wall, no more bottles of beer.
+    Go to the store and buy some more, 99 bottles of beer on the wall.
+    """
   end
 
-  defp what_to_do(0), do: "Go to the store and buy some more"
-  defp what_to_do(num) do
-    pronoun = pronoun(num)
-  	"Take #{pronoun} down and pass it around"
+  def verse(1) do
+    """
+    1 bottle of beer on the wall, 1 bottle of beer.
+    Take it down and pass it around, no more bottles of beer on the wall.
+    """
   end
 
-  defp bottles_phrase(-1), do: "99 bottles"
-  defp bottles_phrase(0), do: "no more bottles"
-  defp bottles_phrase(1), do: "1 bottle"
-  defp bottles_phrase(num), do: "#{num} bottles"
+  def verse(2) do
+    """
+    2 bottles of beer on the wall, 2 bottles of beer.
+    Take one down and pass it around, 1 bottle of beer on the wall.
+    """
+  end
 
-  defp pronoun(1), do: "it"
-  defp pronoun(_number), do: "one"
+  def verse(n) do
+    """
+    #{n} bottles of beer on the wall, #{n} bottles of beer.
+    Take one down and pass it around, #{n-1} bottles of beer on the wall.
+    """
+  end
 
   @doc """
   Get the entire beer song for a given range of numbers of bottles.
@@ -33,8 +37,7 @@ defmodule BeerSong do
   @spec lyrics(Range.t()) :: String.t()
   def lyrics(range) do
     range
-    |> Enum.map(&verse/1)
-    |> Enum.join("\n")
+    |> Enum.map_join("\n", &verse/1)
   end
 
   def lyrics(), do: lyrics(99..00)
