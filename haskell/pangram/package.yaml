@@ -4,6 +4,7 @@ version: 1.4.1.10
 dependencies:
   - base
   - containers
+  - text
 
 library:
   exposed-modules: Pangram
