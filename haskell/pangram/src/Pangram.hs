@@ -1,17 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Pangram (isPangram) where
+module Pangram
+  ( isPangram
+  ) where
 
+import qualified Data.Char       as C
 import qualified Data.Map.Strict as M
-import qualified Data.Char as C
 
-import           Data.Text (Text)
-import qualified Data.Text as T
+import           Data.Text       (Text)
+import qualified Data.Text       as T
 
 isPangram :: Text -> Bool
-isPangram text = (M.size $ charCount filteredText ) == 26
-    where
-        filteredText = T.map C.toLower $ T.filter C.isLetter $ text
+isPangram text = (M.size $ charCount filteredText) == 26
+  where
+    filteredText = T.map C.toLower $ T.filter C.isLetter $ text
 
 -- Constant: An empty map
 emptyMap :: Num a => M.Map Char a
