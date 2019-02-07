@@ -4,11 +4,11 @@ module Pangram
   ( isPangram
   ) where
 
-import qualified Data.Char       as C
-import qualified Data.Set as S
+import qualified Data.Char as C
+import qualified Data.Set  as S
 
-import           Data.Text       (Text)
-import qualified Data.Text       as T
+import           Data.Text (Text)
+import qualified Data.Text as T
 
 isPangram :: Text -> Bool
 isPangram text = (S.size $ charSet filteredText) == 26
