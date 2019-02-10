@@ -2,14 +2,8 @@ module DNA
   ( toRNA
   ) where
 
-import           Data.Either (partitionEithers)
-
 toRNA :: String -> Either Char String
-toRNA xs
-  | lefts == "" = Right $ concat rights
-  | otherwise = Left $ head lefts
-  where
-    (lefts, rights) = partitionEithers $ map toRNA1 xs
+toRNA xs = concat <$> traverse toRNA1 xs
 
 toRNA1 :: Char -> Either Char String
 toRNA1 x =
