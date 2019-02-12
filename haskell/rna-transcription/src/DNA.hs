@@ -3,9 +3,9 @@ module DNA
   ) where
 
 toRNA :: String -> Either Char String
-toRNA = mapM toRNA1
+toRNA = mapM complement
   where
-    toRNA1 x =
+    complement x =
       case x of
         'C' -> Right 'G'
         'G' -> Right 'C'
