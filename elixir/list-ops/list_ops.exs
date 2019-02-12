@@ -6,16 +6,16 @@ defmodule ListOps do
   # `++`, `--`, `hd`, `tl`, `in`, and `length`.
 
   @spec count(list) :: non_neg_integer
-  def count(l), do: countp(l, 0)
+  def count(l), do: count(l, 0)
 
-  defp countp([], acc), do: acc
-  defp countp([x | xs], acc), do: countp(xs, acc+1)
+  defp count([], acc), do: acc
+  defp count([x | xs], acc), do: count(xs, acc+1)
 
   @spec reverse(list) :: list
-  def reverse(l), do: reversep(l, [])
+  def reverse(l), do: reverse(l, [])
 
-  defp reversep([], l2), do: l2
-  defp reversep([x | xs], l2), do: reversep(xs, [x | l2])
+  defp reverse([], l2), do: l2
+  defp reverse([x | xs], l2), do: reverse(xs, [x | l2])
 
   @spec map(list, (any -> any)) :: list
   def map([], _f), do: []
@@ -38,16 +38,17 @@ defmodule ListOps do
   end
 
   @spec append(list, list) :: list
+  def append(a, []), do: a
   def append([], b), do: b
   def append(a, b) do
-    reverse( appendp(reverse(a), b) )
+    do_append(b, reverse(a))
   end
 
-  defp appendp([], []), do: []
-  defp appendp(a, []), do: a
-  defp appendp([], b), do: b
-  defp appendp(a, [b | bs]) do
-    appendp([b | a], bs)
+  defp do_append([], []), do: []
+  defp do_append(a, []), do: a
+  defp do_append([], b), do: b
+  defp do_append(a, [b | bs]) do
+    do_append([b | a], bs)
   end
 
   @spec concat([[any]]) :: [any]
