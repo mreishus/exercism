@@ -1,6 +1,4 @@
 defmodule Markdown do
-
-
   @doc """
     Parses a given string with Markdown syntax and returns the associated HTML for that string.
 
@@ -14,11 +12,11 @@ defmodule Markdown do
   """
   @spec parse(String.t()) :: String.t()
   # r: pipeline, map shorthand, map_join
-  def parse(m) do
-    m
+  def parse(text) do
+    text
     |> String.split("\n")
     |> Enum.map_join("", &process/1)
-    |> patch
+    |> add_ul_tag
   end
 
   # r: rename args, if -> cond, extract helper functions
@@ -60,39 +58,39 @@ defmodule Markdown do
   defp surround_h({level, txt}), do: "<h#{level}>#{txt}</h#{level}>"
 
   # r: oneline, rename
-  defp surround_p(t), do: "<p>#{join_words_with_tags(t)}</p>"
+  defp surround_p(words), do: "<p>#{join_words_with_tags(words)}</p>"
 
   # r: pipeline, map shorthand
-  defp join_words_with_tags(t) do
-    t
+  defp join_words_with_tags(words) do
+    words
     |> Enum.map(&replace_md_with_tag/1)
     |> Enum.join(" ")
   end
 
   # r: oneline, pipeline
-  defp replace_md_with_tag(w), do: w |> replace_prefix_md |> replace_suffix_md
+  defp replace_md_with_tag(word), do: word |> replace_prefix_md |> replace_suffix_md
 
   # r: simplify regex
-  defp replace_prefix_md(w) do
+  defp replace_prefix_md(word) do
     cond do
-      w =~ ~r/^__/ -> String.replace(w, ~r/^__/, "<strong>", global: false)
-      w =~ ~r/^_[^_+]/ -> String.replace(w, ~r/_/, "<em>", global: false)
-      true -> w
+      word =~ ~r/^__/ -> String.replace(word, ~r/^__/, "<strong>", global: false)
+      word =~ ~r/^_[^_+]/ -> String.replace(word, ~r/_/, "<em>", global: false)
+      true -> word
     end
   end
 
   # r: simplify regex
-  defp replace_suffix_md(w) do
+  defp replace_suffix_md(word) do
     cond do
-      w =~ ~r/__$/ -> String.replace(w, ~r/__$/, "</strong>")
-      w =~ ~r/[^_]/ -> String.replace(w, ~r/_/, "</em>")
-      true -> w
+      word =~ ~r/__$/ -> String.replace(word, ~r/__$/, "</strong>")
+      word =~ ~r/[^_]/ -> String.replace(word, ~r/_/, "</em>")
+      true -> word
     end
   end
 
   # r: pipeline, combine strings
-  defp patch(l) do
-    l
+  defp add_ul_tag(text) do
+    text
     |> String.replace("<li>", "<ul><li>", global: false)
     |> String.replace_suffix("</li>", "</li></ul>")
   end
