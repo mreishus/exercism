@@ -20,7 +20,8 @@ defmodule BinarySearch do
   @spec search(tuple, integer) :: {:ok, integer} | :not_found
   def search(numbers, key), do: search(numbers, key, 0, tuple_size(numbers) - 1)
 
-  defp search(numbers, _target,low, high) when low > high, do: :not_found
+  defp search(_numbers, _target, low, high) when low > high, do: :not_found
+
   defp search(numbers, target, low, high) do
     mid = (low + high) |> div(2)
     mid_elem = numbers |> elem(mid)
@@ -28,8 +29,10 @@ defmodule BinarySearch do
     cond do
       mid_elem == target ->
         {:ok, mid}
+
       mid_elem > target ->
         search(numbers, target, low, mid - 1)
+
       mid_elem < target ->
         search(numbers, target, mid + 1, high)
     end

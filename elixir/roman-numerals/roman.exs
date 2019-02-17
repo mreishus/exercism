@@ -19,5 +19,4 @@ defmodule Roman do
   defp roman(acc, 4), do: acc <> "IV"
   defp roman(acc, n) when n >= 1, do: roman(acc <> "I", n - 1)
   defp roman(acc, 0), do: acc
-
 end
