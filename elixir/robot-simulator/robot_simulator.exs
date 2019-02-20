@@ -1,29 +1,27 @@
 defmodule RobotSimulator do
   @directions [:north, :east, :south, :west]
+
+  defguard is_direction(direction) when direction in @directions
+  defguard is_position(x, y) when is_integer(x) and is_integer(y)
+
   @doc """
   Create a Robot Simulator given an initial direction and position.
 
   Valid directions are: `:north`, `:east`, `:south`, `:west`
   """
-  @spec create(direction :: atom, position :: {integer, integer}) :: any
-  def create(direction \\ :north, position \\ {0, 0}) do
-    with {:dir, true} <- {:dir, direction_valid?(direction)},
-         {:pos, true} <- {:pos, position_valid?(position)} do
-      %{position: position, direction: direction}
-    else
-      {:dir, false} -> {:error, "invalid direction"}
-      {:pos, false} -> {:error, "invalid position"}
-    end
+  def create(direction \\ :north, {x, y} = position \\ {0, 0})
+      when is_direction(direction) and is_position(x, y) do
+    %{position: position, direction: direction}
   end
 
-  # Is direction valid?
-  # (Atom) -> Bool
-  defp direction_valid?(direction), do: Enum.member?(@directions, direction)
+  def create(direction, {x, y} = position)
+      when not is_direction(direction) and is_position(x, y) do
+    {:error, "invalid direction"}
+  end
 
-  # Is position valid?
-  # ({Integer, Integer}) -> Bool
-  defp position_valid?({x, y}) when is_integer(x) and is_integer(y), do: true
-  defp position_valid?(_), do: false
+  def create(direction, _) do
+    {:error, "invalid position"}
+  end
 
   @doc """
   Simulate the robot's movement given a string of instructions.
