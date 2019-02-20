@@ -7,23 +7,12 @@ defmodule RobotSimulator do
   """
   @spec create(direction :: atom, position :: {integer, integer}) :: any
   def create(direction \\ :north, position \\ {0, 0}) do
-    {dv, pv} = {
-      direction_valid?(direction),
-      position_valid?(position)
-    }
-
-    case {dv, pv} do
-      {true, true} ->
-        %{position: position, direction: direction}
-
-      {false, true} ->
-        {:error, "invalid direction"}
-
-      {true, false} ->
-        {:error, "invalid position"}
-
-      {false, false} ->
-        {:error, "invalid direction and position"}
+    with {:dir, true} <- {:dir, direction_valid?(direction)},
+         {:pos, true} <- {:pos, position_valid?(position)} do
+      %{position: position, direction: direction}
+    else
+      {:dir, false} -> {:error, "invalid direction"}
+      {:pos, false} -> {:error, "invalid position"}
     end
   end
 
