@@ -10,4 +10,4 @@ sumOfMultiples factors limit =
 
 multiples :: Integer -> Integer -> [Integer]
 multiples limit 0      = []
-multiples limit factor = [i | i <- [1 .. (limit - 1)], i `mod` factor == 0]
+multiples limit factor = [i | i <- [1 .. (limit - 1)], i `rem` factor == 0]
