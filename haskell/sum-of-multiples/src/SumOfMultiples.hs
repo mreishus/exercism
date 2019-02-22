@@ -2,10 +2,11 @@ module SumOfMultiples
   ( sumOfMultiples
   ) where
 
-import           Data.List (nub)
+import           Data.List.Extra (nubOrd)
 
 sumOfMultiples :: [Integer] -> Integer -> Integer
-sumOfMultiples factors limit = sum $ nub $ concatMap (multiples limit) factors
+sumOfMultiples factors limit =
+  sum $ nubOrd $ concatMap (multiples limit) factors
 
 multiples :: Integer -> Integer -> [Integer]
 multiples limit 0      = []
