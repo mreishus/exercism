@@ -17,8 +17,8 @@ data Nucleotide
 nucleotideCounts :: String -> Either String (Map Nucleotide Int)
 nucleotideCounts xs = parse xs >>= nucCount
 
-parse :: [Char] -> Either String [Nucleotide]
-parse xs = sequence $ map (\x -> readEither [x] :: Either String Nucleotide) xs
+parse :: String -> Either String [Nucleotide]
+parse = mapM (\x -> readEither [x])
 
 nucCount :: [Nucleotide] -> Either String (Map Nucleotide Int)
 nucCount nucs = Right $ foldl addNucToMap noNucs nucs
