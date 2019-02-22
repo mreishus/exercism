@@ -38,57 +38,6 @@ defmodule RightCrumb do
   defstruct value: nil, tree: nil
 end
 
-defmodule TestZ do
-  alias BinTree, as: BT
-
-  def testme do
-    t = t1()
-    t |> IO.inspect()
-    {t, []} |> go_left |> go_right |> go_up |> go_up |> IO.inspect()
-  end
-
-  def go_left({nil, breadcrumbs}) when is_list(breadcrumbs), do: {nil, breadcrumbs}
-
-  def go_left({tree, breadcrumbs}) when is_list(breadcrumbs) do
-    new_crumb = %LeftCrumb{value: tree.value, tree: tree.right}
-    {tree.left, [new_crumb | breadcrumbs]}
-  end
-
-  def go_right({nil, breadcrumbs}) when is_list(breadcrumbs), do: {nil, breadcrumbs}
-
-  def go_right({tree, breadcrumbs}) when is_list(breadcrumbs) do
-    new_crumb = %RightCrumb{value: tree.value, tree: tree.left}
-    {tree.right, [new_crumb | breadcrumbs]}
-  end
-
-  def go_up({tree, []}), do: {tree, []}
-
-  def go_up({tree, [%LeftCrumb{} = crumb | breadcrumbs]}) do
-    new_tree = %BT{
-      value: crumb.value,
-      left: tree,
-      right: crumb.tree
-    }
-
-    {new_tree, breadcrumbs}
-  end
-
-  def go_up({tree, [%RightCrumb{} = crumb | breadcrumbs]}) do
-    new_tree = %BT{
-      value: crumb.value,
-      left: crumb.tree,
-      right: tree
-    }
-
-    {new_tree, breadcrumbs}
-  end
-
-  defp bt(value, left, right), do: %BT{value: value, left: left, right: right}
-  defp leaf(value), do: %BT{value: value}
-
-  defp t1, do: bt(1, bt(2, nil, leaf(3)), leaf(4))
-end
-
 defmodule Zipper do
   alias BinTree, as: BT
 
@@ -150,7 +99,7 @@ defmodule Zipper do
   Get the parent of the focus node, if any.
   """
   @spec up(Z.t()) :: Z.t()
-  def up({tree, []}), do: nil
+  def up({_tree, []}), do: nil
 
   def up({tree, [%LeftCrumb{} = crumb | breadcrumbs]}) do
     new_tree = %BT{
