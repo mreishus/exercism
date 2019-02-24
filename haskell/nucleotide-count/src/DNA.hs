@@ -15,13 +15,13 @@ data Nucleotide
   deriving (Eq, Ord, Show, Read)
 
 nucleotideCounts :: String -> Either String (Map Nucleotide Int)
-nucleotideCounts xs = parse xs >>= nucCount
+nucleotideCounts xs = nucCount <$> parse xs
 
 parse :: String -> Either String [Nucleotide]
 parse = mapM (\x -> readEither [x])
 
-nucCount :: [Nucleotide] -> Either String (Map Nucleotide Int)
-nucCount nucs = Right $ foldl addNucToMap noNucs nucs
+nucCount :: [Nucleotide] -> Map Nucleotide Int
+nucCount = foldl addNucToMap noNucs
 
 noNucs :: Map Nucleotide Int
 noNucs = M.fromList [(A, 0), (C, 0), (G, 0), (T, 0)]
