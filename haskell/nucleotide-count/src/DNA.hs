@@ -12,7 +12,7 @@ data Nucleotide
   | C
   | G
   | T
-  deriving (Eq, Ord, Show, Read)
+  deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
 nucleotideCounts :: String -> Either String (Map Nucleotide Int)
 nucleotideCounts xs = nucCount <$> parse xs
@@ -24,7 +24,7 @@ nucCount :: [Nucleotide] -> Map Nucleotide Int
 nucCount = foldl addNucToMap noNucs
 
 noNucs :: Map Nucleotide Int
-noNucs = M.fromList [(A, 0), (C, 0), (G, 0), (T, 0)]
+noNucs = M.fromList $ zip [(minBound :: Nucleotide) ..] [0,0 ..]
 
 -- Build up a map of nuc frequency counts by adding one nuc seen.
 addNucToMap :: Map Nucleotide Int -> Nucleotide -> Map Nucleotide Int
