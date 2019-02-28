@@ -3,7 +3,7 @@ module Grains
   , total
   ) where
 
-import           Data.Maybe (catMaybes)
+import           Data.Maybe (mapMaybe)
 
 square :: Integer -> Maybe Integer
 square n
@@ -11,4 +11,4 @@ square n
   | otherwise = Just (2 ^ (n - 1))
 
 total :: Integer
-total = sum . catMaybes $ map square [1 .. 64]
+total = sum $ mapMaybe square [1 .. 64]
