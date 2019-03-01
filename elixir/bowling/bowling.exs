@@ -28,6 +28,9 @@ defmodule Window do
 end
 
 defmodule Bowling do
+  @max_frames 10
+  @max_pins 10
+
   @doc """
     Creates a new game of bowling that can be used to store the results of
     the game
@@ -44,7 +47,7 @@ defmodule Bowling do
   """
   @spec roll(any, integer) :: any | String.t()
   def roll(_, roll) when roll < 0, do: {:error, "Negative roll is invalid"}
-  def roll(_, roll) when roll > 10, do: {:error, "Pin count exceeds pins on the lane"}
+  def roll(_, roll) when roll > @max_pins, do: {:error, "Pin count exceeds pins on the lane"}
 
   def roll(game, roll) do
     case game_over?(game) do
@@ -67,7 +70,7 @@ defmodule Bowling do
     invalid_rollsums =
       game.frames
       |> Enum.map(fn f -> Enum.sum(f.rolls) end)
-      |> Enum.filter(fn rollsum -> rollsum > 10 end)
+      |> Enum.filter(fn rollsum -> rollsum > @max_pins end)
 
     cond do
       Enum.count(invalid_rollsums) > 0 -> {:error, "Pin count exceeds pins on the lane"}
@@ -140,7 +143,7 @@ defmodule Bowling do
   # next two frames rolled (or nil if not yet rolled.)
   #
   # Example:
-  # get_frames_with_context([f5, f4, f3, f2, f1]) = 
+  # get_frames_with_context([f5, f4, f3, f2, f1]) =
   #   [ {f1, [f1, f2, f3] },
   #     {f2, [f2, f3, f4] },
   #     {f3, [f3, f4, f5] },
@@ -157,7 +160,7 @@ defmodule Bowling do
   # score_frame :: (frame, [frame_and_next_two_frames]) -> Int
   # Given a frame and its context created from get_frames_with_context,
   # return the score of that frame.
-  defp score_frame(%{frame_no: frame_no}, _) when frame_no > 10, do: 0
+  defp score_frame(%{frame_no: frame_no}, _) when frame_no > @max_frames, do: 0
 
   defp score_frame(frame, [_ | next_frames]) do
     score = frame.rolls |> Enum.sum()
@@ -209,29 +212,29 @@ defmodule Bowling do
   end
 
   # strike? :: (frame) -> boolean
-  defp strike?(f), do: length(f.rolls) == 1 && Enum.at(f.rolls, 0) == 10
+  defp strike?(f), do: length(f.rolls) == 1 && Enum.at(f.rolls, 0) == @max_pins
   # spare? :: (frame) -> boolean
-  defp spare?(f), do: length(f.rolls) > 1 && Enum.sum(f.rolls) == 10
+  defp spare?(f), do: length(f.rolls) > 1 && Enum.sum(f.rolls) == @max_pins
 
   # game_over? :: (game) -> boolean
-  defp game_over?(%{frames: frames} = _game) when length(frames) < 10, do: false
+  defp game_over?(%{frames: frames} = _game) when length(frames) < @max_frames, do: false
 
   defp game_over?(%{frames: frames} = game) do
-    tenth_frame = frames |> Enum.filter(fn fr -> fr.frame_no == 10 end) |> Enum.at(0)
+    tenth_frame = frames |> Enum.filter(fn fr -> fr.frame_no == @max_frames end) |> Enum.at(0)
 
     cond do
-      strike?(tenth_frame) -> rolls_after_frame_10(frames) == 2
-      spare?(tenth_frame) -> rolls_after_frame_10(frames) == 1
+      strike?(tenth_frame) -> bonus_rolls_after_last_frame(frames) == 2
+      spare?(tenth_frame) -> bonus_rolls_after_last_frame(frames) == 1
       true -> game.next_roll_frame == 11
     end
   end
 
   defp game_over?(_), do: false
 
-  # rolls_after_frame_10 :: ([frame]) -> int
-  defp rolls_after_frame_10(frames) do
+  # bonus_rolls_after_last_frame :: ([frame]) -> int
+  defp bonus_rolls_after_last_frame(frames) do
     frames
-    |> Enum.filter(fn fr -> fr.frame_no > 10 end)
+    |> Enum.filter(fn fr -> fr.frame_no > @max_frames end)
     |> Enum.flat_map(fn fr -> fr.rolls end)
     |> Enum.count()
   end
