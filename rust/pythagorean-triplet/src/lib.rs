@@ -16,7 +16,7 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
             if !is_square(sum) {
                 continue;
             }
-            let z = (sum as f64).sqrt() as u32;
+            let z = f64::from(sum).sqrt() as u32;
 
             if x + y + z < target {
                 continue;
@@ -29,9 +29,9 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
         }
     }
 
-    return result;
+    result
 }
 
 fn is_square(n: u32) -> bool {
-    return (n as f64).sqrt().fract() == 0.0;
+    f64::from(n).sqrt().fract() == 0.0
 }
