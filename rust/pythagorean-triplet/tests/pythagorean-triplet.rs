@@ -3,6 +3,7 @@ use std::{collections::HashSet, iter::FromIterator};
 
 fn process_tripletswithsum_case(sum: u32, expected: &[[u32; 3]]) {
     let triplets = find(sum);
+    println!("{:?}", triplets);
 
     if !expected.is_empty() {
         let expected = HashSet::from_iter(expected.iter().cloned());
