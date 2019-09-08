@@ -11,6 +11,12 @@ defmodule ListOps do
   defp count([], acc), do: acc
   defp count([x | xs], acc), do: count(xs, acc + 1)
 
+  def min([]), do: raise("can't min empty list")
+  def min([x | xs]), do: _min(x, xs)
+  defp _min(m, []), do: m
+  defp _min(m, [x | xs]) when x < m, do: _min(x, xs)
+  defp _min(m, [_x | xs]), do: _min(m, xs)
+
   @spec reverse(list) :: list
   def reverse(l), do: reverse(l, [])
 
