@@ -4,8 +4,7 @@ module Hamming
       raise ArgumentError.new()
     end
 
-    0.upto(s1.size - 1)
-      .select { |i| s1.chars[i] != s2.chars[i] }
-      .size
+    (0...s1.size)
+      .count { |i| s1.chars[i] != s2.chars[i] }
   end
 end
